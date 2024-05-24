@@ -10,10 +10,13 @@ def get_prompt_response(prompt, is_revision = False) -> dict:
     """
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "Your role is to answer the user prompt as accurately and concisely as possible."},
-            {"role": "user", "content": prompt}
-        ]
+        messages=[{
+            "role": "system", 
+            "content": "Your role is to answer the user prompt as accurately and concisely as possible."
+        }, {
+            "role": "user", 
+            "content": prompt
+        }]
     )
     generated_response = response['choices'][0]['message']['content']
 
@@ -26,20 +29,22 @@ def get_prompt_response(prompt, is_revision = False) -> dict:
     return prompt_response
 
 
-def get_prompt_revision(data: dict = {"prompt": None, "response": None}):
+def get_prompt_revision(data: dict = {"prompt": None, "response": None}, optimization_criteria: list = ["conciseness", "readability", "informative tone"]):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "Your role is to review LLM prompts and their responses. \
-                                           You have a critical eye for refining prompts to produce the \
-                                           most concise, accurate, and detailed reponses possible."
-             },
-            {"role": "user", "content": f"Revise the prompt so that the response is as clear and concise as possible. \
-                                            Here is the original prompt: {data['prompt']}. \
-                                            Here is the LLM response: {data['response']}. \
-                                            Rewrite the prompt."
-            } 
-        ]
+        messages=[{
+            "role": "system",
+            "content": 
+                f"You review prompts given to GPT-3.5-Turbo and the responses the model produces. \
+                  Rewrite the prompt so that the model response is optimized for the following characteristics: {', '.join(optimization_criteria)}."
+            }, {
+            "role": "user", 
+            "content": 
+                f"Rewrite the prompt based on the original prompt and response given below. \
+                  Return ONLY your revised prompt ready to be given to an LLM. \
+                  Here is the original prompt: {data['prompt']}. \
+                  Here is the LLM response: {data['response']}." 
+        }]
     )
     revised_prompt = response['choices'][0]['message']['content']
     return revised_prompt
