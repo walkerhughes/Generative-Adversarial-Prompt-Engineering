@@ -1,0 +1,10 @@
+[
+    {
+        "prompt": "I don't understand the 3 body problem",
+        "response": "The three-body problem refers to the difficulty in predicting the motion of three or more celestial bodies based on their gravitational interactions. It is a complex issue in physics and astronomy due to the unpredictable nature of the interactions between three or more massive objects."
+    },
+    {
+        "revised_prompt": "Explain the concept of the three-body problem in physics and astronomy concisely.",
+        "revised_response": "The three-body problem in physics and astronomy involves calculating the motion of three mutually interacting bodies, such as stars or planets, based on their gravitational forces. It is notoriously difficult to solve analytically because there is no general solution due to its chaotic nature."
+    }
+]
