@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv() 
 
+
 def get_prompt_response(prompt, is_revision = False) -> dict:
     """
     Takes a prompt and returns response dictionary 
