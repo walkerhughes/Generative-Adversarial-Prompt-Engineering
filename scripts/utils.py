@@ -1,6 +1,8 @@
 import openai 
-from dotenv import load_dotenv
+from typing_extensions import override
+from openai import AssistantEventHandler
 
+from dotenv import load_dotenv
 load_dotenv() 
 
 
@@ -48,3 +50,26 @@ def get_prompt_revision(data: dict = {"prompt": None, "response": None}, optimiz
     )
     revised_prompt = response['choices'][0]['message']['content']
     return revised_prompt
+
+
+class EventHandler(AssistantEventHandler):    
+  @override
+  def on_text_created(self, text) -> None:
+    print(f"", end="", flush=True)
+      
+  @override
+  def on_text_delta(self, delta, snapshot):
+    print(delta.value, end="", flush=True)
+      
+  def on_tool_call_created(self, tool_call):
+    print(f"{tool_call.type}\n", flush=True)
+  
+  def on_tool_call_delta(self, delta, snapshot):
+    if delta.type == 'code_interpreter':
+      if delta.code_interpreter.input:
+        print(delta.code_interpreter.input, end="", flush=True)
+      if delta.code_interpreter.outputs:
+        print(f"\n\noutput >", flush=True)
+        for output in delta.code_interpreter.outputs:
+          if output.type == "logs":
+            print(f"\n{output.logs}", flush=True)
